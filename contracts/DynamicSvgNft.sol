@@ -3,16 +3,20 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "base64-sol/base64.sol";
 
-contract DynamicSvgNft is ERC721 {
+contract DynamicSvgNft is ERC721, Ownable {
 
     uint256 private s_tokenCounter;
     string private s_lowImageURI;
     string private s_highImageURI;
+
     AggregatorV3Interface internal immutable i_priceFeed;
+
     mapping(uint256 => int256) private s_tokenIdToHighValues;
+
     string private constant base64EncodedSvgPrefix = "data:image/svg+xml;base64,";
 
     event CreatedNFT(uint256 indexed tokenId, int256 highVal);
@@ -68,6 +72,22 @@ contract DynamicSvgNft is ERC721 {
                     )
                 )
             );
+    }
+
+    function getLowSVG() public view returns (string memory) {
+        return s_lowImageURI;
+    }
+
+    function getHighSVG() public view returns (string memory) {
+        return s_highImageURI;
+    }
+
+    function getPriceFeed() public view returns (AggregatorV3Interface) {
+        return i_priceFeed;
+    }
+
+    function getTokenCounter() public view returns (uint256) {
+        return s_tokenCounter;
     }
 
 }

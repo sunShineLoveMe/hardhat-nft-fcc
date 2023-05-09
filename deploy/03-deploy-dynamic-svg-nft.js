@@ -11,6 +11,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     let ethUsdPriceFeedAddress
 
     if(developmentChains.includes(network.name)) {
+        // await ethers.getContractAt("VRFCoordinatorV2Mock", (await deployments.get("VRFCoordinatorV2Mock")).address)
         const EthUsdAggregator = await ethers.getContract("MockV3Aggregator")
         ethUsdPriceFeedAddress = EthUsdAggregator.address
     } else {
